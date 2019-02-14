@@ -60,10 +60,10 @@ while(True):
 	ret, frame = cap.read()
 	center_x = -1
 	center_y = -1
-	#print(frame.shape) #480x640
+
 	# Our operations on the frame come here
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	#print(parameters)
+
  
 	'''	   detectMarkers(...)
 		detectMarkers(image, dictionary[, corners[, ids[, parameters[, rejectedI
@@ -85,85 +85,43 @@ while(True):
 	cv2.line(frame,loc[2],loc[7],(255,255,255),2) #limiter atas
 	cv2.line(frame,loc[3],loc[6],(0,255,0),2) #limiter bawah
 	
-	# #print("Elapsed Time : ", end - start)
-	# if center_x < thres_x_left and center_x >0 :
-	# 	control_left = True
-	# 	#mirror
-	# 	debug+="R"
-	# 	keyboard.press('d')
-		
-	# 	sleep(0.05)
-	# 	keyboard.release('d')
-		
-	# if center_x > thres_x_right and center_x >0:
-	# 	control_right = True
-	# 	debug+="L"
-	# 	keyboard.press('a')
-	# 	sleep(0.05)
-	# 	keyboard.release('a')
-
-		
-	# if center_y < thres_y_up and center_y > 0:
-	# 	control_jump = True
-	# 	debug+="w"
-	# 	keyboard.press('w')
-	# 	sleep(0.05)
-	# 	keyboard.release('w')
-
-		
-	# if center_y > thres_y_down and center_y > 0:
-	# 	control_sleding = True
-	# 	keyboard.press('s')
-	# 	sleep(0.05)
-	# 	keyboard.release('s')
-
 	if center_x < thres_x_left and center_x >0 :
-		debug="R"
+		debug = "Left"
 		if lastkey != 'd':
 			keyboard.release(lastkey)
-			#sleep(0.05)
 			lastkey = 'd'
 			keyboard.press(lastkey)
-
 	elif center_x > thres_x_right and center_x >0:
-		debug="L"
+		debug = "Right"
 		if lastkey != 'a':
 			keyboard.release(lastkey)
-			#sleep(0.05)
 			lastkey = 'a'
 			keyboard.press(lastkey)
-
 	elif center_y < thres_y_up and center_y > 0:
-		debug="U"
+		debug = "Jump"
 		if lastkey != 'w':
 			keyboard.release(lastkey)
-			#sleep(0.05)
 			lastkey = 'w'
-			keyboard.press(lastkey)  
-	
+			keyboard.press(lastkey)  	
 	elif center_y > thres_y_down and center_y > 0:
-		debug="U"
+		debug = "Slide"
 		if lastkey != 's':
 			keyboard.release(lastkey)
-			#sleep(0.05)
 			lastkey = 's'
-			keyboard.press(lastkey)
-	
+			keyboard.press(lastkey)	
 	else:
 		keyboard.release(lastkey)
-		#sleep(0.05)
 		lastkey = 'p'
 		
-	font = cv2.FONT_HERSHEY_SIMPLEX
-	cv2.putText(frame,debug,(10,20), font, 1,(255,255,255),2,cv2.LINE_AA)
+	cv2.putText(frame,debug,(10,20), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),2,cv2.LINE_AA)
 	frame = aruco.drawDetectedMarkers(frame, corners)
- 
-	#print(rejectedImgPoints)
+
 	# Display the resulting frame
 	cv2.imshow('frame',frame)
 	if cv2.waitKey(1) & 0xFF == ord('q'):
 		break
-	#sleep(0.1)
+
+
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
